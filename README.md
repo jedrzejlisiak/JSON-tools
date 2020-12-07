@@ -1,4 +1,5 @@
 # JSON-tools
+![Build status](<https://travis-ci.com/jedrzejlisiak/JSON-tools.svg?token=pkmwTEUQoJVNyfMDigwC&branch=main>)
 
 **Opis projektu**
 
