@@ -7,13 +7,13 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class JsonTools {
 
-    private JsonNode JSON1, JSON2;
-    public JsonTools(JsonNode JSON1, JsonNode JSON2){
+    private String JSON1, JSON2;
+    public JsonTools(String JSON1, String JSON2){
         this.JSON1 = JSON1;
         this.JSON2 = JSON2;
     }
 
-    public String transform(String transform, String no){
+    public String transform(String transform, String no, String fields){
         if (transform.equals("deminify")){
             //System.out.println("tutaj");
             if(no.equals("1")){
