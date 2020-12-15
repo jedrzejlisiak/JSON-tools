@@ -11,17 +11,17 @@ public class JSONComparator {
     public String checkFiles(){
 
         if (f1.equals("") && f2.equals("")){
-            return("Oba jsony są puste");
+            return "Oba jsony są puste";
         }
         else if (f1.equals("") || f2.equals("")){
-            return("Jeden z jsonów jest pusty");
+            return "Jeden z jsonów jest pusty";
         }
         else if (f1.equals(f2)){
-            return("Jsony są identyczne");
+            return "Jsony są identyczne";
         }
         else{
-            compareStr(f1,f2);
-            return("Porównywanie brrrrr");
+            return compareStr();
+
 
         }
 
@@ -38,7 +38,11 @@ public class JSONComparator {
 
     }
 
-    public String compareStr(String f1, String f2){
+    public String compareStr(){
+        String s1 = new JSONDeminification(new JSONComponentImp(f1)).decorate();
+        String s2 = new JSONDeminification(new JSONComponentImp(f2)).decorate();
+        f1 = s1;
+        f2 = s2;
         String lines1[] = f1.split("\\r?\\n");
         String lines2[] = f2.split("\\r?\\n");
 

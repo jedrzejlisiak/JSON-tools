@@ -35,6 +35,10 @@ public class JsonTools {
                 return c.decorate();
             }
         }
+        else if(transform.equals("compare")){
+            JSONComparator compa = new JSONComparator(JSON1, JSON2);
+            return compa.checkFiles();
+        }
         return JSON1.toString();
     }
 }
