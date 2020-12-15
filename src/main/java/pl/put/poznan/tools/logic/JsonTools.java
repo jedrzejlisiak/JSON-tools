@@ -13,11 +13,27 @@ public class JsonTools {
         this.JSON2 = JSON2;
     }
 
-    public String transform(String transform){
+    public String transform(String transform, String no){
         if (transform.equals("deminify")){
-            System.out.println("tutaj");
-            JSONComponent c = new JSONDeminification(new JSONComponentImp(JSON1));
-            return c.decorate();
+            //System.out.println("tutaj");
+            if(no.equals("1")){
+                JSONComponent c = new JSONDeminification(new JSONComponentImp(JSON1));
+                return c.decorate();
+            }
+            else {
+                JSONComponent c = new JSONDeminification(new JSONComponentImp(JSON2));
+                return c.decorate();
+            }
+        }
+        else if(transform.equals("minify")){
+            if(no.equals("1")){
+                JSONComponent c = new JSONMinification(new JSONComponentImp(JSON1));
+                return c.decorate();
+            }
+            else{
+                JSONComponent c = new JSONMinification(new JSONComponentImp(JSON2));
+                return c.decorate();
+            }
         }
         return JSON1.toString();
     }
