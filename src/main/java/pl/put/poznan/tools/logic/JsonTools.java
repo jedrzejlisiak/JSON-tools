@@ -35,15 +35,18 @@ public class JsonTools {
                 return c.decorate();
             }
         }
-        else if(transform.equals("filterNeg")){
-            if(no.equals("1")){
+        else if(transform.equals("filterNeg")) {
+            if (no.equals("1")) {
                 JSONComponent c = new JSONNegFilter(new JSONComponentImp(JSON1), fields);
                 return c.decorate();
-            }
-            else{
+            } else {
                 JSONComponent c = new JSONNegFilter(new JSONComponentImp(JSON2), fields);
                 return c.decorate();
             }
+        }
+        else if(transform.equals("compare")){
+            JSONComparator compa = new JSONComparator(JSON1, JSON2);
+            return compa.checkFiles();
         }
         return JSON1.toString();
     }
