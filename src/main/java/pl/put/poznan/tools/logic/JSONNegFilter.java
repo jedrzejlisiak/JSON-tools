@@ -28,7 +28,9 @@ public class JSONNegFilter extends JSONDecorator {
         }
         String[] f = fields.split(",");
         boolean found = false; // variable used for determining if field to be excluded was found
+        boolean inside = false; // to check if inside ignored array/object
         String result = "";
+        JsonToken last = null;
         while(!parser.isClosed()){
             JsonToken token = null;
             try {
@@ -41,10 +43,16 @@ public class JSONNegFilter extends JSONDecorator {
                 if(!found) {
                     result += "[";
                 }
+                else {
+                    inside = true;
+                }
             }
             else if(JsonToken.START_OBJECT.equals(token)){
                 if(!found) {
                     result += "{";
+                }
+                else {
+                    inside = true;
                 }
             }
             else if(JsonToken.END_ARRAY.equals(token)) {
@@ -53,6 +61,7 @@ public class JSONNegFilter extends JSONDecorator {
                 }
                 else {
                     found = false;
+                    inside = false;
                 }
             }
             else if(JsonToken.END_OBJECT.equals(token)) {
@@ -61,10 +70,17 @@ public class JSONNegFilter extends JSONDecorator {
                 }
                 else {
                     found = false;
+                    inside = false;
                 }
             }
             else if(JsonToken.FIELD_NAME.equals(token)) {
                 if(!found) {
+                    if(JsonToken.VALUE_STRING.equals(last) || JsonToken.VALUE_TRUE.equals(last)
+                            || JsonToken.VALUE_FALSE.equals(last) || JsonToken.VALUE_NUMBER_FLOAT.equals(last) ||
+                            JsonToken.VALUE_NUMBER_INT.equals(last) || JsonToken.END_OBJECT.equals(last) ||
+                    JsonToken.END_ARRAY.equals(last)){
+                        result += ",";
+                    }
                     String fieldName = null;
                     try {
                         fieldName = parser.getCurrentName();
@@ -85,11 +101,27 @@ public class JSONNegFilter extends JSONDecorator {
                     }
                 }
             }
-            else {
+            else if(JsonToken.VALUE_STRING.equals(token) || JsonToken.VALUE_TRUE.equals(token)
+            || JsonToken.VALUE_FALSE.equals(token) || JsonToken.VALUE_NUMBER_FLOAT.equals(token) ||
+            JsonToken.VALUE_NUMBER_INT.equals(token)) {
+                if(!found) {
+                    String fieldName;
+                    try {
+                        fieldName = parser.getValueAsString();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "Error";
+                    }
 
+                    result += "\"" +fieldName;
+                }
+                else if(!inside) {
+                        found = false;
+                    }
+                }
+
+            last = token;
             }
-        }
-
         return result;
     }
 }

@@ -26,8 +26,8 @@ public class JSONMinification extends JSONDecorator{
         String nJson = node.toString();
         String output = "";
         boolean coma = false;
-        for(int i = 0, n = s.length() ; i < n ; i++) {
-            char c = s.charAt(i);
+        for(int i = 0, n = nJson.length() ; i < n ; i++) {
+            char c = nJson.charAt(i);
             if(c == '\"'){
                 coma = !coma;
             }
