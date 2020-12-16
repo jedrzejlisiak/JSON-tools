@@ -28,12 +28,24 @@ public class JSONComparator {
     }
 
     public String comparation(String f1, String f2, int n) {
+        int l1 = f1.length();
+        if (l1 > 50){ l1 = 50;}
+
+
+        String outStr = "";
 
         if (f1.equals(f2)){
             return "";
         }
         else{
-            return String.format("Unequal line nr \"%d\":    ",n)+ f1 + "    " + f2 + "\n";
+
+            outStr += f1;
+            for (int i = 0; i < (50 - l1); i++){
+                outStr += " ";
+            }
+            outStr += f2;
+
+            return String.format("Unequal line nr \"%d\":    ",n)+ outStr + "\n";
         }
 
     }
