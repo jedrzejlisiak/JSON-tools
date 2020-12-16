@@ -1,127 +1,69 @@
 package pl.put.poznan.tools.logic;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class JSONNegFilter extends JSONDecorator {
     private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
-    private final String fields;
-    public JSONNegFilter(JSONComponent comp, String f) {super(comp); fields = f;}
+    private final String[] fields;
+
+    public JSONNegFilter(JSONComponent comp, String f) {super(comp); fields = f.split(",");}
 
     @Override
     public String decorate() { return decorateNeg(comp.decorate()); }
 
     public String decorateNeg(String json) {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = null;
         try {
-            parser = factory.createParser(json);
-        } catch (Throwable e) {
-            logger.debug(e.toString());
-            return "{\"error\": \"Unable to parse JSON\"}";
+            node = mapper.readTree(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{\"Error\": \"Couldn't filter Json\"}";
         }
-        String[] f = fields.split(",");
-        boolean found = false; // variable used for determining if field to be excluded was found
-        boolean inside = false; // to check if inside ignored array/object
-        String result = "";
-        JsonToken last = null;
-        while(!parser.isClosed()){
-            JsonToken token = null;
-            try {
-                token = parser.nextToken();
-            } catch (IOException e) {
-                e.printStackTrace();
+        traverse(node);
+
+        return(node.toString());
+    }
+
+    public void traverse(JsonNode node) {
+        if(node.isObject()){
+            Iterator<String> fieldNames = node.fieldNames();
+            ArrayList<String> names = new ArrayList<String>();
+            while (fieldNames.hasNext()) {
+                names.add(fieldNames.next());
             }
 
-            if(JsonToken.START_ARRAY.equals(token)) {
-                if(!found) {
-                    result += "[";
+            ObjectNode n = (ObjectNode) node;
+            for(String fieldName : names) {
+
+                if(Arrays.asList(fields).contains(fieldName)){
+                    n.remove(fieldName);
                 }
                 else {
-                    inside = true;
+                    JsonNode fieldValue = node.get(fieldName);
+                    traverse(fieldValue);
                 }
             }
-            else if(JsonToken.START_OBJECT.equals(token)){
-                if(!found) {
-                    result += "{";
-                }
-                else {
-                    inside = true;
-                }
-            }
-            else if(JsonToken.END_ARRAY.equals(token)) {
-                if(!found) {
-                    result += "]";
-                }
-                else {
-                    found = false;
-                    inside = false;
-                }
-            }
-            else if(JsonToken.END_OBJECT.equals(token)) {
-                if(!found) {
-                    result += "}";
-                }
-                else {
-                    found = false;
-                    inside = false;
-                }
-            }
-            else if(JsonToken.FIELD_NAME.equals(token)) {
-                if(!found) {
-                    if(JsonToken.VALUE_STRING.equals(last) || JsonToken.VALUE_TRUE.equals(last)
-                            || JsonToken.VALUE_FALSE.equals(last) || JsonToken.VALUE_NUMBER_FLOAT.equals(last) ||
-                            JsonToken.VALUE_NUMBER_INT.equals(last) || JsonToken.END_OBJECT.equals(last) ||
-                    JsonToken.END_ARRAY.equals(last)){
-                        result += ",";
-                    }
-                    String fieldName = null;
-                    try {
-                        fieldName = parser.getCurrentName();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    for (int i = 0; i < f.length; i++) {
-                        if (Arrays.asList(f).contains(fieldName)) {
-                            found = true;
-                            break;
-                        }
-                    }
 
 
-                    if(!found) {
-                        result += "\"" + fieldName + "\":";
-                    }
-                }
+        } else if(node.isArray()){
+            ArrayNode arrayNode = (ArrayNode) node;
+            for(int i = 0; i < arrayNode.size(); i++) {
+                    JsonNode arrayElement = arrayNode.get(i);
+                    traverse(arrayElement);
             }
-            else if(JsonToken.VALUE_STRING.equals(token) || JsonToken.VALUE_TRUE.equals(token)
-            || JsonToken.VALUE_FALSE.equals(token) || JsonToken.VALUE_NUMBER_FLOAT.equals(token) ||
-            JsonToken.VALUE_NUMBER_INT.equals(token)) {
-                if(!found) {
-                    String fieldName;
-                    try {
-                        fieldName = parser.getValueAsString();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return "Error";
-                    }
 
-                    result += "\"" +fieldName;
-                }
-                else if(!inside) {
-                        found = false;
-                    }
-                }
-
-            last = token;
-            }
-        return result;
+        }
     }
 }
