@@ -13,9 +13,6 @@ public class JSONComparator {
         if (f1.equals("") && f2.equals("")){
             return "Oba jsony są puste";
         }
-        else if (f1.equals("") || f2.equals("")){
-            return "Jeden z jsonów jest pusty";
-        }
         else if (f1.equals(f2)){
             return "Jsony są identyczne";
         }
