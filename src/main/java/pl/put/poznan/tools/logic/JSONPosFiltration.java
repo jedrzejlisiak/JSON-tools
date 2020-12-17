@@ -52,6 +52,7 @@ public class JSONPosFiltration extends JSONDecorator {
                 if(!traverse(fieldValue)) {
                     fieldNames.remove();
                 }
+                else { f = true; }
             }
             return f;
 
