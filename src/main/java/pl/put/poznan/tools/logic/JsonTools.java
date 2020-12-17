@@ -48,6 +48,15 @@ public class JsonTools {
             JSONComparator compa = new JSONComparator(JSON1, JSON2);
             return compa.checkFiles();
         }
+        else if(transform.equals("filterPos")) {
+            if (no.equals("1")) {
+                JSONComponent c = new JSONPosFiltration(new JSONComponentImp(JSON1), fields);
+                return c.decorate();
+            } else {
+                JSONComponent c = new JSONPosFiltration(new JSONComponentImp(JSON2), fields);
+                return c.decorate();
+            }
+        }
         return JSON1.toString();
     }
 }
