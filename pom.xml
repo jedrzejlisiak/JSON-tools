@@ -15,9 +15,7 @@
     <artifactId>io-project-architecture</artifactId>
     <version>0.2</version>
 
-	<properties>
-        <java.version>11</java.version>
-    </properties>
+
 
     
     <dependencies>
@@ -47,6 +45,7 @@
 
 
     <build>
+        <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

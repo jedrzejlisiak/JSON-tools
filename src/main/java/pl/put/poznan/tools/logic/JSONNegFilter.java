@@ -36,7 +36,7 @@ public class JSONNegFilter extends JSONDecorator {
         return(node.toString());
     }
 
-    public void traverse(JsonNode node) {
+    private void traverse(JsonNode node) {
         if(node.isObject()){
             Iterator<String> fieldNames = node.fieldNames();
             ArrayList<String> names = new ArrayList<String>();
