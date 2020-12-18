@@ -34,7 +34,7 @@ public class JSONComparator {
      * or a string which includes the index of the line and both lines
      */
 
-    public String comparation(String f1, String f2, int n) {
+    public String comparison(String f1, String f2, int n) {
         int l1 = f1.length();
         if (l1 > 50){ l1 = 50;}
 
@@ -78,20 +78,20 @@ public class JSONComparator {
 
         if (l1 > l2) {
             for (int i = 0; i < l2; i++) {
-                output +=  comparation(lines1[i] ,lines2[i], i);
+                output +=  comparison(lines1[i] ,lines2[i], i);
 
             }
             for (int j = l2; j < l1; j++) {
-                output +=  comparation(lines1[j], " ", j);
+                output +=  comparison(lines1[j], " ", j);
             }
 
         }
         else{
             for (int i = 0; i < l1; i++) {
-                output +=  comparation(lines1[i] ,lines2[i], i);
+                output +=  comparison(lines1[i] ,lines2[i], i);
             }
             for (int j = l1; j < l2; j++) {
-                output +=  comparation(" ", lines2[j], j);
+                output +=  comparison(" ", lines2[j], j);
             }
         }
 

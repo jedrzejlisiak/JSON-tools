@@ -13,29 +13,56 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ *  Class purpose is to delete chosen fields from Json file
+ */
+
 public class JSONNegFilter extends JSONDecorator {
     private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
     private final String[] fields;
 
+    /**
+     *  This is a constructor
+     *
+     * @param comp this is a component from decorator pattern, performing different operations on the Json file
+     * @param f this is a string entered as a parameter of HTTP query, containing fields to be deleted
+     */
     public JSONNegFilter(JSONComponent comp, String f) {super(comp); fields = f.split(",");}
 
+    /**
+     *  Override of main decorator pattern function.
+     *  It passes result of decorate method of comp element from constructor to decorateNeg method
+     */
     @Override
     public String decorate() { return decorateNeg(comp.decorate()); }
 
-    public String decorateNeg(String json) {
+    /**
+     *  This is a method performing filtering of Json file.
+     *  It transforms file from String to JsonNode and passes it to traverse method
+     *
+     * @param json Json file processed by comp element
+     */
+    private String decorateNeg(String json) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = null;
         try {
             node = mapper.readTree(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "{\"Error\": \"Couldn't filter Json\"}";
+            return "{\"status\": 500,\n"+
+            "\"developerMessage\": \"Try again or with different file.\",\n"+
+                    "\"userMessage\": \"Internal Server Error, could not process JSON.\"}\n";
         }
         traverse(node);
 
         return(node.toString());
     }
 
+    /**
+     *  This is a method that performs DFS on the Json file tree structure, and deletes fields from fields array
+     *
+     * @param node JsonNode that is currently being analyzed
+     */
     private void traverse(JsonNode node) {
         if(node.isObject()){
             Iterator<String> fieldNames = node.fieldNames();

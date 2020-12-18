@@ -25,7 +25,8 @@ public class JSONDeminification extends JSONDecorator{
             r.printStackTrace();
             logger.debug("Error while processing JSON.");
             return "{ \"status\" : 500,\n" +
-                    "\"developerMessage\" : \"Try again or with different file.\", \"userMessage\" : \"Internal Server Error, could not process JSON.\"}";
+                    "\"developerMessage\" : \"Try again or with different file.\",\n"+
+                    "\"userMessage\" : \"Internal Server Error, could not process JSON.\"}\n";
         }
     }
 }
