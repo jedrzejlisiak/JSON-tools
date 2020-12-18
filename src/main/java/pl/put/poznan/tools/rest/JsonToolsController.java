@@ -39,15 +39,16 @@ public class JsonToolsController {
         logger.debug("Deleting: "+ no);
         if(no.equals("1")){
             json = null;
-            return "Deleted: "+no;
+            return "{ \"status\" : 201, \"developerMessage\" : \"OK\", \"userMessage\" : \"File deleted.\"}";
         }
         else if(no.equals("2")){
             json2 = null;
-            return "Deleted: "+no;
+            return "{ \"status\" : 201, \"developerMessage\" : \"OK\", \"userMessage\" : \"File deleted.\"}";
         }
         else{
             logger.debug("Wrong request");
-            return "Wrong request!";
+            return "{ \"status\" : 404,\n" +
+                    "\"developerMessage\" : \"Try accessing different file.\", \"userMessage\" : \"This file does not exist.\"}";
         }
 
     }
@@ -63,10 +64,11 @@ public class JsonToolsController {
             try {
                 objectMapper.readTree(payload);
                 json = payload;
-                return "File read!";
+                return "{ \"status\" : 201, \"developerMessage\" : \"OK\", \"userMessage\" : \"File read.\"}";
             } catch (JsonProcessingException e) {
                 logger.debug(e.toString());
-                return "Wrong JSON file";
+                return "{ \"status\" : 415,\n" +
+                        "\"developerMessage\" : \"Try file with JSON format.\", \"userMessage\" : \"This file is not JSON.\"}";
             }
         }
         else if(no.equals("2")){
@@ -74,11 +76,12 @@ public class JsonToolsController {
             try {
                 objectMapper.readTree(payload);
                 json2 = payload;
-                return "File read!";
+                return "{ \"status\" : 201, \"developerMessage\" : \"OK\", \"userMessage\" : \"Filre read.\"}";
 
             } catch (JsonProcessingException e) {
                 logger.debug(e.toString());
-                return "Wrong JSON file";
+                return "{ \"status\" : 415,\n" +
+                        "\"developerMessage\" : \"Try file with JSON format.\", \"userMessage\" : \"This file is not JSON.\"}";
             }
         }
         else{

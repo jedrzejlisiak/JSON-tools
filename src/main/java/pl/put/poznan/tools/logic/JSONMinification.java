@@ -4,9 +4,11 @@ package pl.put.poznan.tools.logic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONMinification extends JSONDecorator{
-
+    private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
     public JSONMinification(JSONComponent comp) {
         super(comp);
     }
@@ -20,8 +22,10 @@ public class JSONMinification extends JSONDecorator{
         try {
             node = mapper.readTree(s);
         } catch (JsonProcessingException e) {
+            logger.debug("Error while processing JSON.");
             e.printStackTrace();
-            return "Failed do minify";
+            return "{ \"status\" : 500,\n" +
+                    "\"developerMessage\" : \"Try again or with different file.\", \"userMessage\" : \"Internal Server Error, could not process JSON.\"}";
         }
         String nJson = node.toString();
         String output = "";
