@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 /**
  * This class overloads JSONDecorator and it's purpose is to extract given fields from JSON file
+ *
+ * @author Pawel Boruta
  */
 public class JSONPosFiltration extends JSONDecorator {
     /**
