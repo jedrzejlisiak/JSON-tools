@@ -1,17 +1,14 @@
-package pl.put.poznan.tools.rest;
+package main.java.pl.put.poznan.tools.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import pl.put.poznan.tools.logic.JSONComponent;
-import pl.put.poznan.tools.logic.JSONComponentImp;
-import pl.put.poznan.tools.logic.JSONDeminification;
-import pl.put.poznan.tools.logic.JsonTools;
+
 
 import java.io.IOException;
-import java.util.Arrays;
+import main.java.pl.put.poznan.tools.logic.JsonTools;
 
 
 @RestController

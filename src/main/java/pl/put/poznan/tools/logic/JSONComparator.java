@@ -1,7 +1,9 @@
-package pl.put.poznan.tools.logic;
+package main.java.pl.put.poznan.tools.logic;
 
 /**
  *  Class purpose is to find differences in two JSON files
+ *
+ * @author Jerzy Weber
  */
 
 

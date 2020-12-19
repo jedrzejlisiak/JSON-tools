@@ -1,6 +1,5 @@
-package pl.put.poznan.tools.logic;
+package main.java.pl.put.poznan.tools.logic;
 
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
