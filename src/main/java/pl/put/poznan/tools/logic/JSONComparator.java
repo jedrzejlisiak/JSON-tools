@@ -36,7 +36,7 @@ public class JSONComparator {
      * or a string which includes the index of the line and both lines
      */
 
-    public String comparison(String f1, String f2, int n) {
+    private String comparison(String f1, String f2, int n) {
         int l1 = f1.length();
         if (l1 > 50){ l1 = 50;}
 
