@@ -1,5 +1,6 @@
-package main.java.pl.put.poznan.tools.app;
+package pl.put.poznan.tools.app;
 
+import pl.put.poznan.tools.rest.JsonToolsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

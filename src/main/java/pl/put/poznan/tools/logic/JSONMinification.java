@@ -1,4 +1,4 @@
-package main.java.pl.put.poznan.tools.logic;
+package pl.put.poznan.tools.logic;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
