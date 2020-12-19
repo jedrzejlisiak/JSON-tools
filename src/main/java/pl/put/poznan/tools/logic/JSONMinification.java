@@ -1,4 +1,4 @@
-package main.java.pl.put.poznan.tools.logic;
+package pl.put.poznan.tools.logic;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,15 +7,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *  Class purpose is to minify JSON file.
+ *
+ * @author Lubomir Basinski
+ */
+
 public class JSONMinification extends JSONDecorator{
     private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
+    /**
+     *  This is a constructor calling constructor of component.
+     *
+     * @param comp is component
+     */
     public JSONMinification(JSONComponent comp) {
         super(comp);
     }
+    /**
+     *  This function calls the decorateMini function on decorated component.
+     *
+     */
     @Override
     public String decorate() {
         return decorateMini(comp.decorate());
     }
+    /**
+     *  This is Minification decoration function.
+     *
+     * @param s s is a JSON file and decorates it.
+     * @return decorated JSON or error JSON.
+     */
     private String decorateMini(String s){
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node;

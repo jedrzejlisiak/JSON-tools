@@ -1,4 +1,4 @@
-package main.java.pl.put.poznan.tools.logic;
+package pl.put.poznan.tools.logic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 /**
  * This class overloads JSONDecorator and it's purpose is to extract given fields from JSON file
+ *
+ * @author Pawel Boruta
  */
 public class JSONPosFiltration extends JSONDecorator {
 

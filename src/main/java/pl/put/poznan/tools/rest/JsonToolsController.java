@@ -1,4 +1,4 @@
-package main.java.pl.put.poznan.tools.rest;
+package pl.put.poznan.tools.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
-import main.java.pl.put.poznan.tools.logic.JsonTools;
+import pl.put.poznan.tools.logic.JsonTools;
 
 
 @RestController
