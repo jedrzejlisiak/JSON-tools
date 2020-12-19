@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -13,6 +15,9 @@ import java.util.ArrayList;
  * This class overloads JSONDecorator and it's purpose is to extract given fields from JSON file
  */
 public class JSONPosFiltration extends JSONDecorator {
+
+    private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
+
     /**
      * This ArrayList stores fields that will be extracted from JSON
      */
@@ -35,7 +40,7 @@ public class JSONPosFiltration extends JSONDecorator {
      */
     @Override
     public String decorate() {
-        return DecoratePos(comp.decorate());
+        return decoratePos(comp.decorate());
     }
 
     /**
@@ -43,14 +48,18 @@ public class JSONPosFiltration extends JSONDecorator {
      * @param s JSON file in String form
      * @return JSON with given fields and preserved structure of the provided JSON
      */
-    private String DecoratePos(String s) {
+    private String decoratePos(String s) {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode Json = objectMapper.createObjectNode();
+        JsonNode Json;
         try {
             Json = objectMapper.readTree(s);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            logger.debug("Error while processing JSON.");
+            return "{ \"status\" : 500,\n" +
+                    "\"developerMessage\" : \"Try again or with different file.\",\n"+
+                    "\"userMessage\" : \"Internal Server Error, could not process JSON.\"}\n";
         }
         traverse(Json);
         return Json.toString();
