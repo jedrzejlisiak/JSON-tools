@@ -40,6 +40,8 @@ public class JSONNegFilter extends JSONDecorator {
      *  It transforms file from String to JsonNode and passes it to traverse method
      *
      * @param json Json file processed by comp element
+     *
+     * @return returns filtered JSON
      */
     private String decorateNeg(String json) {
         ObjectMapper mapper = new ObjectMapper();

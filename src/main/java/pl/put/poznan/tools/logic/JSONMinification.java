@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  *  Class purpose is to minify JSON file.
  *
- * @author Lubomir Basinski
+ * @author Jędrzej Lisiak
  */
 
 public class JSONMinification extends JSONDecorator{
@@ -24,7 +24,7 @@ public class JSONMinification extends JSONDecorator{
         super(comp);
     }
     /**
-     *  This function calls the decorateMini function on decorated component.
+     *  This method calls the decorateMini method on decorated component.
      *
      */
     @Override
@@ -32,7 +32,7 @@ public class JSONMinification extends JSONDecorator{
         return decorateMini(comp.decorate());
     }
     /**
-     *  This is Minification decoration function.
+     *  This is Minification decoration method.
      *
      * @param s s is a JSON file and decorates it.
      * @return decorated JSON or error JSON.

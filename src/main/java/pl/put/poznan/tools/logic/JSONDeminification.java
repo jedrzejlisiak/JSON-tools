@@ -21,7 +21,7 @@ public class JSONDeminification extends JSONDecorator{
         super(comp);
     }
     /**
-     *  This function calls the undecorateMini function on decorated component.
+     *  This method calls the undecorateMini method on decorated component.
      *
      */
     @Override
@@ -29,7 +29,7 @@ public class JSONDeminification extends JSONDecorator{
         return undecorateMini(comp.decorate());
     }
     /**
-     *  This is Deminification decoration function.
+     *  This is Deminification decoration method.
      *
      * @param s s is a JSON file and decorates it.
      * @return decorated JSON or error JSON.
