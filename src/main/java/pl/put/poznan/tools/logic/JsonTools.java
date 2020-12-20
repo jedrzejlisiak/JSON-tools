@@ -32,13 +32,7 @@ public class JsonTools {
      */
     public String transform(String transform, String no, String fields){
 
-        JSONComponent c;
-        if(no.equals("1")) {
-            c = new JSONComponentImp(JSON1);
-        }
-        else {
-            c = new JSONComponentImp(JSON2);
-        }
+        JSONComponent c = new JSONComponentImp(JSON1);
 
         ArrayList<String> transformations = new ArrayList<String>(Arrays.asList(transform.split(",")));
 
@@ -59,7 +53,7 @@ public class JsonTools {
         if(transformations.contains("minify")){
             c = new JSONMinification(c);
         }
-        else if(transform.equals("compare")) {
+        if(transformations.contains("compare")) {
             JSONComparator compa = new JSONComparator(JSON1, JSON2);
             return compa.checkFiles();
         }
