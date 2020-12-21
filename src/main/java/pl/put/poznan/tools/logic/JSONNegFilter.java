@@ -1,95 +1,97 @@
 package pl.put.poznan.tools.logic;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+
+/**
+ *  Class purpose is to delete chosen fields from Json file
+ */
 
 public class JSONNegFilter extends JSONDecorator {
     private static final Logger logger = LoggerFactory.getLogger(JSONNegFilter.class);
-    private final String fields;
-    public JSONNegFilter(JSONComponent comp, String f) {super(comp); fields = f;}
+    private final String[] fields;
 
+    /**
+     *  This is a constructor
+     *
+     * @param comp this is a component from decorator pattern, performing different operations on the Json file
+     * @param f this is a string entered as a parameter of HTTP query, containing fields to be deleted
+     */
+    public JSONNegFilter(JSONComponent comp, String f) {super(comp); fields = f.split(",");}
+
+    /**
+     *  Override of main decorator pattern function.
+     *  It passes result of decorate method of comp element from constructor to decorateNeg method
+     */
     @Override
     public String decorate() { return decorateNeg(comp.decorate()); }
 
-    public String decorateNeg(String json) {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser;
+    /**
+     *  This is a method performing filtering of Json file.
+     *  It transforms file from String to JsonNode and passes it to traverse method
+     *
+     * @param json Json file processed by comp element
+     *
+     * @return returns filtered JSON
+     */
+    private String decorateNeg(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = null;
         try {
-            parser = factory.createParser(json);
-        } catch (Throwable e) {
-            logger.debug(e.toString());
-            return "{\"error\": \"Unable to parse JSON\"}";
+            node = mapper.readTree(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{\"status\": 500,\n"+
+            "\"developerMessage\": \"Try again or with different file.\",\n"+
+                    "\"userMessage\": \"Internal Server Error, could not process JSON.\"}\n";
         }
-        String[] f = fields.split(",");
-        boolean found = false; // variable used for determining if field to be excluded was found
-        String result = "";
-        while(!parser.isClosed()){
-            JsonToken token = null;
-            try {
-                token = parser.nextToken();
-            } catch (IOException e) {
-                e.printStackTrace();
+        traverse(node);
+
+        return(node.toString());
+    }
+
+    /**
+     *  This is a method that performs DFS on the Json file tree structure, and deletes fields from fields array
+     *
+     * @param node JsonNode that is currently being analyzed
+     */
+    private void traverse(JsonNode node) {
+        if(node.isObject()){
+            Iterator<String> fieldNames = node.fieldNames();
+            ArrayList<String> names = new ArrayList<String>();
+            while (fieldNames.hasNext()) {
+                names.add(fieldNames.next());
             }
 
-            if(JsonToken.START_ARRAY.equals(token)) {
-                if(!found) {
-                    result += "[";
-                }
-            }
-            else if(JsonToken.START_OBJECT.equals(token)){
-                if(!found) {
-                    result += "{";
-                }
-            }
-            else if(JsonToken.END_ARRAY.equals(token)) {
-                if(!found) {
-                    result += "]";
+            ObjectNode n = (ObjectNode) node;
+            for(String fieldName : names) {
+
+                if(Arrays.asList(fields).contains(fieldName)){
+                    n.remove(fieldName);
                 }
                 else {
-                    found = false;
+                    JsonNode fieldValue = node.get(fieldName);
+                    traverse(fieldValue);
                 }
             }
-            else if(JsonToken.END_OBJECT.equals(token)) {
-                if(!found) {
-                    result += "}";
-                }
-                else {
-                    found = false;
-                }
+
+
+        } else if(node.isArray()){
+            ArrayNode arrayNode = (ArrayNode) node;
+            for(int i = 0; i < arrayNode.size(); i++) {
+                    JsonNode arrayElement = arrayNode.get(i);
+                    traverse(arrayElement);
             }
-            else if(JsonToken.FIELD_NAME.equals(token)) {
-                if(!found) {
-                    String fieldName = null;
-                    try {
-                        fieldName = parser.getCurrentName();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
-                    for (int i = 0; i < f.length; i++) {
-                        if (Arrays.asList(f).contains(fieldName)) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-
-                    if(!found) {
-                        result += "\"" + fieldName + "\":";
-                    }
-                }
-            }
-            else {
-
-            }
         }
-
-        return result;
     }
 }

@@ -1,6 +1,5 @@
 package pl.put.poznan.tools.logic;
 
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class JSONComponentImp implements JSONComponent{
     private String JSON;
