@@ -1,3 +1,11 @@
-/Users/mochodek/Documents/Dydaktyka/Wyklady/IO/Laboratory classes/projekt/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/app/TextTransformerApplication.java
-/Users/mochodek/Documents/Dydaktyka/Wyklady/IO/Laboratory classes/projekt/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/logic/TextTransformer.java
-/Users/mochodek/Documents/Dydaktyka/Wyklady/IO/Laboratory classes/projekt/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/rest/TextTransformerController.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONMinification.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\app\JsonToolsApplication.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONComponentImp.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONPosFiltration.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONNegFilter.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONComponent.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONComparator.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JsonTools.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONDecorator.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\logic\JSONDeminification.java
+C:\Users\Luber.000\Desktop\no\JSON-tools\src\main\java\pl\put\poznan\tools\rest\JsonToolsController.java

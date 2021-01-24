@@ -46,12 +46,23 @@ public class JsonTools {
             c = new JSONPosFiltration(c, fields);
         }
 
-        if (transformations.contains("deminify")){
+        if (transformations.contains("deminify")&&!transformations.contains("toXml")){
             transformations.remove("deminify");
             c = new JSONDeminification(c);
         }
-        if(transformations.contains("minify")){
+        if(transformations.contains("minify")&&!transformations.contains("toXml")){
             c = new JSONMinification(c);
+        }
+        if(transformations.contains("toXml")){
+            transformations.remove("toXml");
+            if(transformations.contains("deminify")){
+                transformations.remove("deminify");
+                c = new JSONDeminificationXML(c);
+            }
+            else {
+                transformations.remove("minify");
+                c = new JSONMinificationXML(c);
+            }
         }
         if(transformations.contains("compare")) {
             JSONComparator compa = new JSONComparator(JSON1, JSON2);
