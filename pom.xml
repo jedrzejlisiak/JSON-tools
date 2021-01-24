@@ -55,6 +55,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+		<configuration>
+                  <excludes>
+                    <exclude>**/src/test/java/pl/put/poznan/tools/logic/JSONComparatorTest.java</exclude>
+                    <exclude>**/src/test/java/pl/put/poznan/tools/logic/JSONDeminificationTest.java</exclude>
+		    <exclude>**/src/test/java/pl/put/poznan/tools/logic/JSONMinificationTest.java</exclude>
+		    <exclude>**/src/test/java/pl/put/poznan/tools/logic/JSONNegFilterTest.java</exclude>
+	 	    <exclude>**/src/test/java/pl/put/poznan/tools/logic/JSONPosFiltrationTest.java</exclude>
+                  </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
