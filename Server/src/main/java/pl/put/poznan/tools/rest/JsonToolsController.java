@@ -2,6 +2,7 @@ package pl.put.poznan.tools.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -124,10 +125,20 @@ public class JsonToolsController {
             return "{ \"status\" : 201,\n\"developerMessage\" : \"OK\",\n" +
                     "\"userMessage\" : \"File read. It can be accessed at no " + no + "\"}";
         } catch (JsonProcessingException e) {
-            logger.debug(e.toString());
-            return "{ \"status\" : 415,\n" +
-                    "\"developerMessage\" : \"Try file with JSON format.\",\n" +
-                    "\"userMessage\" : \"This file is not JSON.\"\n}";
+            try{
+                XmlMapper xmlMapper = new XmlMapper();
+                String xml = xmlMapper.writeValueAsString(payload);
+                json.put(ind, payload);
+                return "{ \"status\" : 201,\n\"developerMessage\" : \"OK\",\n" +
+                        "\"userMessage\" : \"File read. It can be accessed at no " + no + "\"}";
+            }
+            catch (JsonProcessingException f) {
+                logger.debug(e.toString());
+                return "{ \"status\" : 415,\n" +
+                        "\"developerMessage\" : \"Try file with proper format.\",\n" +
+                        "\"userMessage\" : \"This file is not JSON or XML.\"\n}";
+            }
+
         }
     }
 }

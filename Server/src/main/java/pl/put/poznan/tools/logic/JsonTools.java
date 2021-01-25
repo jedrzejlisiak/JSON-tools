@@ -36,6 +36,11 @@ public class JsonTools {
 
         ArrayList<String> transformations = new ArrayList<String>(Arrays.asList(transform.split(",")));
 
+        if(transformations.contains("toJson")) {
+            transformations.remove("toJson");
+            c = new JSONXmlToJson(c);
+        }
+
         if(transformations.contains("filterNeg")) {
             transformations.remove("filterNeg");
             c = new JSONNegFilter(c, fields);
