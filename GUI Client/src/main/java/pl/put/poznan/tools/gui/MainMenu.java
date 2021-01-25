@@ -33,7 +33,7 @@ public class MainMenu extends JFrame implements ActionListener {
         accept.addActionListener(this);
 
         clear = new JButton("Clear");
-        clear.setBounds(450, 425, 100, 30);
+        clear.setBounds(350, 425, 100, 30);
         clear.addActionListener(this);
 
         input = new JTextArea("Place your file here");
@@ -78,27 +78,33 @@ public class MainMenu extends JFrame implements ActionListener {
         checkBoxes = new Hashtable<>();
 
         JLabel transforms = new JLabel("Transformations");
-        transforms.setBounds(500, 220, 180, 20);
+        transforms.setBounds(500, 200, 180, 20);
 
         checkBoxes.put("minify", new JCheckBox("Minify"));
-        checkBoxes.get("minify").setBounds(500, 250, 180, 20);
+        checkBoxes.get("minify").setBounds(500, 230, 180, 20);
+        checkBoxes.get("minify").addActionListener(this);
 
         checkBoxes.put("deminify", new JCheckBox("Deminify"));
-        checkBoxes.get("deminify").setBounds(500, 280, 180, 20);
+        checkBoxes.get("deminify").setBounds(500, 260, 180, 20);
+        checkBoxes.get("deminify").addActionListener(this);
 
         checkBoxes.put("filterPos", new JCheckBox("Positive filtering"));
-        checkBoxes.get("filterPos").setBounds(500, 310, 180, 20);
+        checkBoxes.get("filterPos").setBounds(500, 290, 180, 20);
         checkBoxes.get("filterPos").addActionListener(this);
 
         checkBoxes.put("filterNeg", new JCheckBox("Negative filtering"));
-        checkBoxes.get("filterNeg").setBounds(500, 340, 180, 20);
+        checkBoxes.get("filterNeg").setBounds(500, 320, 180, 20);
         checkBoxes.get("filterNeg").addActionListener(this);
 
+        checkBoxes.put("compare", new JCheckBox("Compare"));
+        checkBoxes.get("compare").setBounds(500, 350, 180, 20);
+        checkBoxes.get("compare").addActionListener(this);
+
         JLabel pos = new JLabel("Fields to be filtered");
-        pos.setBounds(500, 370, 180, 20);
+        pos.setBounds(500, 400, 180, 20);
 
         filter = new JTextField();
-        filter.setBounds(500, 400, 180, 20);
+        filter.setBounds(500, 430, 180, 20);
         filter.setEnabled(false);
 
 
@@ -118,6 +124,7 @@ public class MainMenu extends JFrame implements ActionListener {
         add(checkBoxes.get("deminify"));
         add(checkBoxes.get("filterPos"));
         add(checkBoxes.get("filterNeg"));
+        add(checkBoxes.get("compare"));
         add(pos);
         add(filter);
 
@@ -151,6 +158,9 @@ public class MainMenu extends JFrame implements ActionListener {
             if(checkBoxes.get("filterNeg").isSelected()) {
                 checkBoxes.get("filterNeg").setSelected(false);
             }
+            if(checkBoxes.get("compare").isSelected()) {
+                checkBoxes.get("filterPos").setSelected(false);
+            }
 
             filter.setEnabled(checkBoxes.get("filterPos").isSelected());
         }
@@ -158,8 +168,53 @@ public class MainMenu extends JFrame implements ActionListener {
             if(checkBoxes.get("filterPos").isSelected()) {
                 checkBoxes.get("filterPos").setSelected(false);
             }
+            if(checkBoxes.get("compare").isSelected()) {
+                checkBoxes.get("filterNeg").setSelected(false);
+            }
 
             filter.setEnabled(checkBoxes.get("filterNeg").isSelected());
+        }
+        else if(source == checkBoxes.get("minify")){
+            if(checkBoxes.get("deminify").isSelected()) {
+                checkBoxes.get("deminify").setSelected(false);
+            }
+            if(checkBoxes.get("compare").isSelected()) {
+                checkBoxes.get("minify").setSelected(false);
+            }
+        }
+        else if(source == checkBoxes.get("deminify")) {
+            if(checkBoxes.get("minify").isSelected()) {
+                checkBoxes.get("minify").setSelected(false);
+            }
+            if(checkBoxes.get("compare").isSelected()) {
+                checkBoxes.get("deminify").setSelected(false);
+            }
+        }
+        else if(source == checkBoxes.get("compare")) {
+            if(checkBoxes.get("compare").isSelected()) {
+                input.setText("First file here");
+                output.setText("Second file here");
+                output.setEnabled(true);
+                for (JCheckBox i : checkBoxes.values()) {
+                    if (i != source) {
+                        i.setSelected(false);
+                    }
+                }
+                jsonIn.setEnabled(false);
+                jsonOut.setEnabled(false);
+                xmlIn.setEnabled(false);
+                xmlOut.setEnabled(false);
+
+                filter.setEnabled(false);
+            }
+            else {
+                output.setEnabled(false);
+
+                jsonIn.setEnabled(true);
+                jsonOut.setEnabled(true);
+                xmlIn.setEnabled(true);
+                xmlOut.setEnabled(true);
+            }
         }
         else if(source == clear) {
             input.setText("");
@@ -173,10 +228,20 @@ public class MainMenu extends JFrame implements ActionListener {
             xmlIn.setSelected(false);
             xmlOut.setSelected(false);
 
+            jsonIn.setEnabled(true);
+            jsonOut.setEnabled(true);
+            xmlIn.setEnabled(true);
+            xmlOut.setEnabled(true);
+
             filter.setEnabled(false);
         }
         else if(source == accept) {
             String in = input.getText();
+            String in2;
+            if(checkBoxes.get("compare").isSelected()) {
+                in2 = output.getText();
+                connection.uploadFile(in2, 1);
+            }
 
             connection.uploadFile(in, 0);
 
@@ -184,7 +249,7 @@ public class MainMenu extends JFrame implements ActionListener {
             int count = 0;
             for(String i : checkBoxes.keySet()) {
                 if(checkBoxes.get(i).isSelected()) {
-                    if(count > 0) args+= ',';
+                    if(count > 0) args += ',';
                     args += i;
                     count++;
                 }
@@ -194,19 +259,55 @@ public class MainMenu extends JFrame implements ActionListener {
                 args += "toXml";
                 count++;
             }
+            if(jsonOut.isSelected()) {
+                if(xmlIn.isSelected()) {
+                    if(count > 0) args += ',';
+                    args += "toJson";
+                    count++;
+                }
+            }
+
             if(count == 0) args = "";
             else args += '&';
 
-            args+="fields=";
+
 
             if(filter.isEnabled()) {
+                args+="fields=";
                 args+=filter.getText();
             }
 
-            HttpResponse<String> response = connection.sendRequest(args, 0);
+            HttpResponse<String> response = connection.sendRequest(args, 0,
+                    checkBoxes.get("compare").isSelected());
+            if(!checkBoxes.get("compare").isSelected()) {
+                output.setText(response.body());
+                output.setEnabled(true);
+            }
+            else {
+                JFrame result = new JFrame("Comparison");
 
-            output.setText(response.body());
-            output.setEnabled(true);
+                result.setSize(500, 700);
+
+                JTextArea field = new JTextArea(response.body());
+                field.setBounds(10, 10, 480, 600);
+                field.setWrapStyleWord(true);
+                field.setLineWrap(true);
+
+                JButton button = new JButton("Ok");
+                button.setBounds(200,650,100,20);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        result.dispose();
+                    }
+                });
+
+                result.add(field);
+                result.add(button);
+
+                result.setLayout(null);
+                result.setVisible(true);
+            }
         }
     }
 }

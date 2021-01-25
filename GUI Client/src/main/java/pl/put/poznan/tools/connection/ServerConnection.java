@@ -57,10 +57,12 @@ public class ServerConnection {
 
     }
 
-    public HttpResponse<String> sendRequest(String params, int slot) {
+    public HttpResponse<String> sendRequest(String params, int slot, boolean compare) {
         URI requestAddr;
         try {
-            requestAddr = new URI(addr.toString() + "?no="+files[slot%2] + '&' + params);
+            requestAddr = new URI(addr.toString() +
+                    "?no="+files[slot%2] + (compare ? "," + files[1] : "") +
+                    (params.length() > 0 ? '&' + params : ""));
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return null;
@@ -82,9 +84,6 @@ public class ServerConnection {
             e.printStackTrace();
             return null;
         }
-
-        System.out.println(response.statusCode());
-        System.out.println(response.body());
 
         return response;
     }
